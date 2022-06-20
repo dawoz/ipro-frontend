@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {SparqlService} from "../sparql/sparql.service";
 
 @Component({
   selector: 'app-query1',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Query1Component implements OnInit {
 
-  constructor() { }
+  constructor(private sparql: SparqlService) { }
 
   ngOnInit(): void {
+    this.sparql.getBands().subscribe(d => console.log(d))
   }
 
 }
