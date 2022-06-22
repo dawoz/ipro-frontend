@@ -11,3 +11,12 @@ body {
   transform: scale(1.1);
   background-color: #f8f9fa;
 }
+
+.hover {
+  transition: transform .1s ease-in-out;
+  cursor: pointer;
+}
+
+.hover:hover {
+  transform: scale(1.02);
+}

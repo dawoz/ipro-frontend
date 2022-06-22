@@ -7,11 +7,18 @@ import {SparqlService} from "../sparql/sparql.service";
   styleUrls: ['./query1.component.css']
 })
 export class Query1Component implements OnInit {
+  bands: string[] | undefined
+  bandsUri: string[] | undefined
+  selectedBandUri: string | undefined
 
   constructor(private sparql: SparqlService) { }
 
   ngOnInit(): void {
-    this.sparql.getBands().subscribe(d => console.log(d))
+    this.sparql.getBands().subscribe(d => {
+        // @ts-ignore
+      this.bandsUri = d.map<string>(e => e['band']);
+        // @ts-ignore
+      this.bands = d.map<string>(e => e['band'].split('#').at(-1).replaceAll('_', ' '));
+    })
   }
-
 }

@@ -1,1 +1,16 @@
-<p>query1 works!</p>
+<div class="m-3 mb-4">
+
+
+  <form class="form-inline text-center">
+    <div class="d-inline-flex">
+      <p class="my-auto mx-3"><strong>Band</strong></p>
+      <select name="band" class="form-select" style="width: 300px" [(ngModel)]="selectedBandUri">
+        <option disabled selected hidden [value]="undefined">select band</option>
+        <option *ngFor="let b of bands; let i = index" [ngValue]="bandsUri![i]">{{b}}</option>
+      </select>
+    </div>
+  </form>
+  <div *ngIf="selectedBandUri !== undefined">
+    Test
+  </div>
+</div>
