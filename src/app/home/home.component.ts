@@ -7,14 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   queries = [
-    'Band',
-    'Band',
-    'Band',
-    'Band',
-    'Band',
-    'Band',
-    'Band',
-    'Band',
+    'List albums of a band',
+    'List genres of an album',
+    'List albums by genre',
+    'List genres that use a particular instrument',
+    'List genres that influenced another genre',
+    'List tracks of an album',
+    'List genre evolution of a band',
+    'List instruments used in a particular genre',
   ]
   constructor() { }
 

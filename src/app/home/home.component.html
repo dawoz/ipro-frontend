@@ -1,5 +1,12 @@
+<div class="m-4 text-center">
+  <img class="mx-auto" src="assets/img/ipro.svg" width="350px">
+  <h1 class="text-center">Italian Progressive Rock Ontology</h1>
+</div>
 <div class="m-3 row row-cols-2 justify-content-center text-center">
-  <div *ngFor="let q of queries; let i = index" class="col col-5 card card-hover m-3">
-    <a [routerLink]="'query'+i" class="text-dark strong" style="text-underline: transparent">{{q}}</a>
+  <div [routerLink]="'query'+(i+1)" *ngFor="let q of queries; let i = index" class="col col-5 card card-hover m-3">
+    <div class="m-4">
+      <strong>QUERY {{i+1}}</strong>
+      <p class="p-0 text-center text-dark strong" style="text-underline: transparent">{{q}}</p>
+    </div>
   </div>
 </div>
