@@ -1,0 +1,9 @@
+.card {
+  margin-bottom: 40px;
+  padding: 25px;
+}
+
+.card > p {
+  font-size: larger;
+  margin: 0;
+}

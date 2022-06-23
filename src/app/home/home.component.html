@@ -1,8 +1,15 @@
-<div class="m-3 row row-cols-2 justify-content-center text-center">
-  <div [routerLink]="'query'+(i+1)" *ngFor="let q of queries; let i = index" class="col col-5 card card-hover m-3">
-    <div class="m-4">
-      <strong>QUERY {{i+1}}</strong>
-      <p class="p-0 text-center text-dark strong" style="text-underline: transparent">{{q}}</p>
+<div class="m-3 row justify-content-center text-center">
+  <div class="w-75">
+    <div routerLink="band" class="card card-hover shadow-sm">
+      <p><strong>🎼 Navigate by band</strong></p>
+    </div>
+
+    <div routerLink="genre" class="card card-hover shadow-sm">
+      <p><strong>🎶 Navigate by genre</strong></p>
+    </div>
+
+    <div routerLink="instrument" class="card card-hover shadow-sm">
+      <p><strong>🎸 Navigate by instrument</strong></p>
     </div>
   </div>
 </div>

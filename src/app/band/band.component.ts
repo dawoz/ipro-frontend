@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {RDFData, SparqlService} from "../sparql/sparql.service";
 
 @Component({
-  selector: 'app-query1',
-  templateUrl: './query1.component.html',
-  styleUrls: ['./query1.component.css']
+  selector: 'app-band',
+  templateUrl: './band.component.html',
+  styleUrls: ['./band.component.css']
 })
 
 
 
-export class Query1Component implements OnInit {
+export class BandComponent implements OnInit {
   bands: Array<string> | undefined
   bandsUri: Array<string> | undefined
   selectedIndex: number | undefined
