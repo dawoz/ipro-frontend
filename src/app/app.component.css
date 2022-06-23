@@ -1,15 +1,5 @@
-.card {
-  min-width: 450px;
-}
-
 @media only screen and (min-width: 600px) {
   .card {
-    min-width: 500px;
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  .card {
-    min-width: 700px;
+    min-width: 600px;
   }
 }

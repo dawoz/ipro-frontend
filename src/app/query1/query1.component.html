@@ -1,16 +1,44 @@
 <div class="m-3 mb-4">
 
+  <div class="text-center">
+    <p class="mx-3 mb-5" style="font-size: larger"><strong>QUERY 1</strong><span class="mx-4">List albums of a band</span></p>
+  </div>
 
   <form class="form-inline text-center">
     <div class="d-inline-flex">
       <p class="my-auto mx-3"><strong>Band</strong></p>
-      <select name="band" class="form-select" style="width: 300px" [(ngModel)]="selectedBandUri">
+      <select name="band" class="form-select" style="width: 300px" [(ngModel)]="selectedIndex" (ngModelChange)="queryAlbums()">
         <option disabled selected hidden [value]="undefined">select band</option>
-        <option *ngFor="let b of bands; let i = index" [ngValue]="bandsUri![i]">{{b}}</option>
+        <option *ngFor="let b of bands; let i = index" [ngValue]="i">{{b}}</option>
       </select>
     </div>
   </form>
-  <div *ngIf="selectedBandUri !== undefined">
-    Test
+  <div *ngIf="selectedIndex !== undefined">
+    <hr class="my-4">
+    <h4 class="mb-4 mx-3">Albums of <span style="color: #00a0b8">{{bands![selectedIndex!]}}</span></h4>
+
+    <div *ngIf="albums && albums!.length === 0" class="text-center text-warning" style="font-size: larger; margin: 100px; text-decoration: underline">
+      No albums for {{bands![selectedIndex!]}} from 1966 to 1976
+    </div>
+
+    <div class="card m-3" *ngFor="let a of albums; let i = index">
+      <div class="row">
+        <div class="col-auto">
+          <img [src]="a['imageUrl']" class="img img-fluid" width="350px" alt="album image">
+        </div>
+        <div class="col">
+          <div class="m-3">
+            <p style="font-size: large"><strong>{{a['albumLabel']}}</strong><span class="ms-2"></span>-<span class="ms-2">{{a['year']}}</span></p>
+            <p>{{a['albumComment']}}.</p>
+            <p class="mb-1"><strong>Tracks:</strong></p>
+            <div class="row row-cols-lg-2 row-cols-sm-1">
+              <div class="col-auto" *ngFor="let t of tracks[a['album']]">
+                <p class="my-0"><small>{{t['n']}} - {{t['trackLabel']}} ({{t['minutes']}}:{{t['seconds'] === '0' ? '00' : t['seconds']}})</small></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
