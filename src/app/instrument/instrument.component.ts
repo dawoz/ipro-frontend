@@ -34,4 +34,11 @@ export class InstrumentComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  queryInstrumentInfo() {
+    this.roleIdx = undefined
+  }
+
+  queryRoleInfo() {
+    this.instrumentIdx = undefined
+  }
 }
