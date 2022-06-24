@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {RDFData, SparqlService} from "../sparql/sparql.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-band',
@@ -24,18 +25,31 @@ export class BandComponent implements OnInit {
   membersInstrument: Record<string,RDFData[]> = {}
   membersRole: Record<string, RDFData[]> = {}
 
-  constructor(private sparql: SparqlService) { }
+  constructor(private sparql: SparqlService, private route: ActivatedRoute) {
+    this.sparql.getBands().subscribe(d => {
+      this.bandsUri = d.map<string>(e => e['band'])
+      this.bands = d.map<string>(e => e['bandLabel'])
+      let bandParam = route.snapshot.paramMap.get('band')
+      if (bandParam !== null) {
+        this.bandIdx = this.bandsUri.indexOf(bandParam)
+        this.queryAlbums()
+      }
+    })
+  }
 
   ngOnInit(): void {
-    this.sparql.getBands().subscribe(d => {
-      this.bandsUri = d.map<string>(e => e['band']);
-      this.bands = d.map<string>(e => e['bandLabel']);
-    })
   }
 
   queryAlbums() {
     this.albumIdx = undefined
-    this.sparql.query1(this.bandsUri![this.bandIdx!]).subscribe(albums => this.albums = albums)
+    this.sparql.query1(this.bandsUri![this.bandIdx!]).subscribe(albums => {
+      this.albums = albums
+      let albumParam = this.route.snapshot.paramMap.get('album')
+      if (albumParam !== null) {
+        this.albumIdx = this.albums.findIndex(r => r['album'] === albumParam)
+        this.queryAlbumInfo()
+      }
+    })
   }
 
   queryAlbumInfo() {
