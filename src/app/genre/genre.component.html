@@ -1,1 +1,82 @@
-<p>query2 works!</p>
+<div class="m-3 mb-4">
+  <hr class="my-4">
+  <p class="text-center my-3" style="font-size: larger"><strong>Navigate by genre</strong></p>
+
+  <form class="form-inline text-center">
+    <div class="d-inline-flex">
+      <p class="my-auto mx-3"><strong>Genre</strong></p>
+      <select name="genre" class="form-select" style="width: 300px" [(ngModel)]="genreIdx"
+              (ngModelChange)="queryGenre()">
+        <option disabled selected hidden [value]="undefined">select genre</option>
+        <option *ngFor="let g of genres; let i = index" [ngValue]="i">{{g['genreLabel']}}</option>
+      </select>
+    </div>
+  </form>
+
+  <div *ngIf="genreIdx !== undefined">
+    <hr class="my-4">
+
+    <p class="mb-4 mx-3" style="font-size: xx-large">
+      <strong class="mx-2" style="color: #00a0b8">{{genres![genreIdx!]['genreLabel']}}</strong>
+    </p>
+    <p class="m-4">{{format(genres![genreIdx!]['genreComment'])}}</p>
+
+    <p class="m-4" style="font-size: x-large" *ngIf="genreCondition()"><strong>Related genres</strong></p>
+
+    <div class="m-4" *ngIf="subgenres !== undefined && subgenres.length > 0">
+      <p class="mb-1"><strong>Subgenres:</strong></p>
+      <div class="row row-cols-md-2 row-cols-lg-3">
+        <div class="col-auto" *ngFor="let g of subgenres">
+          <p class="my-0"><span class="mx-3">●</span><small><a [routerLink]="['/genre', {genre:g['subgenre']}]">{{g['subgenreLabel']}}</a></small></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-4" *ngIf="supergenres !== undefined && supergenres.length > 0">
+      <p class="mb-1"><strong>Supergenres:</strong></p>
+      <div class="row row-cols-md-2 row-cols-lg-3">
+        <div class="col-auto" *ngFor="let g of supergenres">
+          <p class="my-0"><span class="mx-3">●</span><small><a [routerLink]="['/genre', {genre:g['supergenre']}]">{{g['supergenreLabel']}}</a></small></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-4" *ngIf="originGenres !== undefined && originGenres.length > 0">
+      <p class="mb-1"><strong>Origins:</strong></p>
+      <div class="row row-cols-md-2 row-cols-lg-3">
+        <div class="col-auto" *ngFor="let g of originGenres">
+          <p class="my-0"><span class="mx-3">●</span><small><a [routerLink]="['/genre', {genre:g['parent']}]">{{g['parentLabel']}}</a></small></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-4" *ngIf="influencedGenres !== undefined && influencedGenres.length > 0">
+      <p class="mb-1"><strong>Influenced genres:</strong></p>
+      <div class="row row-cols-md-2 row-cols-lg-3">
+        <div class="col-auto" *ngFor="let g of influencedGenres">
+          <p class="my-0"><span class="mx-3">●</span><small><a [routerLink]="['/genre', {genre:g['child']}]">{{g['childLabel']}}</a></small></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-4" *ngIf="instruments !== undefined && instruments.length > 0">
+      <p style="font-size: x-large" class="mb-4"><strong>Instruments</strong></p>
+      <div class="row row-cols-md-2 row-cols-lg-3">
+        <div class="col-auto" *ngFor="let i of instruments">
+          <p class="my-0"><span class="mx-3">●</span><small><a [routerLink]="['/instrument', {instrument:i['instrument']}]">{{i['instrumentLabel']}}</a></small></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-4" *ngIf="albumsCondition()">
+      <p style="font-size: x-large" class="my-0"><strong>Albums</strong></p>
+      <div class="row row-cols-md-2 row-cols-lg-3">
+        <div class="col-auto" *ngFor="let b of entries(bandAlbums!)">
+          <p class="mt-4">{{b[0]}}</p>
+          <p class="my-0" *ngFor="let a of b[1]"><span class="mx-3">●</span><small><a [routerLink]="['/band', {band:a['band'], album:a['album']}]">{{a['albumLabel']}}</a></small></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

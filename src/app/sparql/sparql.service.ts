@@ -43,7 +43,7 @@ export class SparqlService {
 
   public getBands(): Observable<Array<RDFData>> {
     const q = `
-      select ?band ?bandLabel where {
+      select distinct ?band ?bandLabel where {
         ?band a :Band ;
               rdfs:label ?bandLabel .
       }`
@@ -51,10 +51,10 @@ export class SparqlService {
   }
 
   // get albums of bands
-  public query1(bandUri: string): Observable<Array<RDFData>> {
+  public query1(bandIri: string): Observable<Array<RDFData>> {
     const q = `
-      select ?album ?albumLabel ?year ?albumComment ?imageUrl where {
-        <${bandUri}> :discography [
+      select distinct ?album ?albumLabel ?year ?albumComment ?imageUrl where {
+        <${bandIri}> :discography [
           :containsRelease ?release
         ] .
         ?release :ofAlbum ?album ;
@@ -67,10 +67,10 @@ export class SparqlService {
   }
 
   // get tracks of an album
-  public getTracksOf(albumUri: string): Observable<Array<RDFData>> {
+  public getTracksOf(albumIri: string): Observable<Array<RDFData>> {
     const q = `
-      select ?n ?trackLabel ?minutes ?seconds where {
-        ?track :trackOf <${albumUri}> ;
+      select distinct ?n ?trackLabel ?minutes ?seconds where {
+        ?track :trackOf <${albumIri}> ;
                :trackNumber ?n ;
                rdfs:label ?trackLabel ;
                time:hasDuration [
@@ -83,10 +83,10 @@ export class SparqlService {
   }
 
   // get tracks of an album
-  public getGenresOf(albumUri: string): Observable<Array<RDFData>> {
+  public getGenresOf(albumIri: string): Observable<Array<RDFData>> {
     const q = `
-      select ?genre ?genreLabel ?genreComment where {
-        <${albumUri}> :hasGenre ?genre .
+      select distinct ?genre ?genreLabel ?genreComment where {
+        <${albumIri}> :hasGenre ?genre .
         ?genre rdfs:comment ?genreComment ;
            rdfs:label ?genreLabel .
       }
@@ -94,10 +94,10 @@ export class SparqlService {
     return this.query(q)
   }
 
-  public getMembersOf(albumUri: string): Observable<Array<RDFData>> {
+  public getMembersOf(albumIri: string): Observable<Array<RDFData>> {
     const q = `
-      select ?member ?role ?instrument ?memberLabel ?instrumentLabel ?roleLabel where {
-        ?p :inAlbum <${albumUri}> .
+      select distinct ?member ?role ?instrument ?memberLabel ?instrumentLabel ?roleLabel where {
+        ?p :inAlbum <${albumIri}> .
         ?member :participatedIn ?p ;
                 rdfs:label ?memberLabel .
         { ?p :withInstrument ?instrument .
@@ -112,7 +112,7 @@ export class SparqlService {
 
   getGenres() {
     const q = `
-      select ?genre ?genreLabel ?genreComment where {
+      select distinct ?genre ?genreLabel ?genreComment where {
         ?genre a :Genre ;
                rdfs:label ?genreLabel ;
                rdfs:comment ?genreComment .
@@ -123,7 +123,7 @@ export class SparqlService {
 
   getInstruments() {
     const q = `
-      select ?instrument ?instrumentLabel ?instrumentComment where {
+      select distinct ?instrument ?instrumentLabel ?instrumentComment where {
         ?instrument a :MusicalInstrument ;
                rdfs:label ?instrumentLabel ;
                rdfs:comment ?instrumentComment .
@@ -134,11 +134,65 @@ export class SparqlService {
 
   getProductionRoles() {
     const q = `
-      select ?role ?roleLabel ?roleComment where {
+      select distinct ?role ?roleLabel ?roleComment where {
         ?role a :ProductionRole ;
                rdfs:label ?roleLabel ;
                rdfs:comment ?roleComment .
       }
+    `
+    return this.query(q)
+  }
+
+  getRelatedGenresOf(genreIri: string) {
+    const q = `
+      select distinct
+            ?subgenre ?subgenreLabel
+            ?supergenre ?supergenreLabel
+            ?parent ?parentLabel
+            ?child ?childLabel
+      where {
+        { <${genreIri}> :influences ?child .
+            ?child rdfs:label ?childLabel . }
+        union
+        { ?parent :influences <${genreIri}> ;
+                   rdfs:label ?parentLabel . }
+        union
+        { <${genreIri}> :hasSubgenre ?subgenre .
+            ?subgenre rdfs:label ?subgenreLabel . }
+        union
+        { ?supergenre :hasSubgenre <${genreIri}> ;
+                   rdfs:label ?supergenreLabel . }
+      }
+    `
+    return this.query(q)
+  }
+
+  getInstrumentsOf(genreIri: string) {
+    const q = `
+      select distinct ?instrument ?instrumentLabel where {
+      ?m :participatedIn [
+          :inAlbum ?a ;
+          :withInstrument ?instrument
+      ] .
+      ?instrument rdfs:label ?instrumentLabel .
+      ?a :hasGenre <${genreIri}> .
+  }
+    `
+    return this.query(q)
+  }
+
+  getBandsAndAlbumsOf(genreIri: string) {
+    const q = `
+      select distinct ?band ?bandLabel ?album ?albumLabel where {
+      ?m :participatedIn [
+          :inAlbum ?album ;
+      ] .
+      ?album rdfs:label ?albumLabel ;
+             :hasGenre <${genreIri}> .
+      ?release :ofAlbum ?album ;
+               :releaseOf [ :discographyOf ?band ] .
+      ?band rdfs:label ?bandLabel .
+  }
     `
     return this.query(q)
   }
