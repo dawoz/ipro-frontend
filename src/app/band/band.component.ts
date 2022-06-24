@@ -39,6 +39,8 @@ export class BandComponent implements OnInit {
   }
 
   queryAlbumInfo() {
+    this.membersInstrument = {}
+    this.membersRole = {}
     let a = this.albums![this.albumIdx!]
     // get tracks
     this.sparql.getTracksOf(a['album']).subscribe(tracks => this.tracks[a['album']] = tracks)

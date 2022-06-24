@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <div class="m-4">
+    <div *ngIf="entries(membersRole).length > 0" class="m-4">
       <p class="mb-1"><strong>Production roles:</strong></p>
       <div *ngFor="let e of entries(membersRole)">
         <p class="my-0"><small><span class="mx-3">●</span>{{e[0]}}: <a [routerLink]="['/instrument', {role:i['role']}]" *ngFor="let i of e[1]; let j = index">{{i['roleLabel']}}{{j + 1 < e[1].length ? ', ' : ''}}</a></small></p>
