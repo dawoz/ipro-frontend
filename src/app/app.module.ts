@@ -9,6 +9,7 @@ import { InstrumentComponent } from './instrument/instrument.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import {FormsModule} from "@angular/forms";
+import { MusicianComponent } from './musician/musician.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {FormsModule} from "@angular/forms";
     BandComponent,
     GenreComponent,
     InstrumentComponent,
-    HomeComponent
+    HomeComponent,
+    MusicianComponent
   ],
   imports: [
     BrowserModule,
