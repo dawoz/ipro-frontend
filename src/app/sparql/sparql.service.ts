@@ -167,7 +167,7 @@ export class SparqlService {
     return this.query(q)
   }
 
-  getInstrumentsOf(genreIri: string) {
+  getInstrumentsOfGenre(genreIri: string) {
     const q = `
       select distinct ?instrument ?instrumentLabel where {
       ?m :participatedIn [
@@ -181,7 +181,7 @@ export class SparqlService {
     return this.query(q)
   }
 
-  getBandsAndAlbumsOf(genreIri: string) {
+  getBandsAndAlbumsOfGenre(genreIri: string) {
     const q = `
       select distinct ?band ?bandLabel ?album ?albumLabel where {
       ?m :participatedIn [
@@ -263,6 +263,52 @@ export class SparqlService {
         ?instrument a <${classIri}> ;
                     rdfs:label ?instrumentLabel ;
                     rdfs:comment ?instrumentComment .
+      }
+    `
+    return this.query(q)
+  }
+
+  getMusicians() {
+    const q = `
+      select distinct ?musician ?musicianLabel ?musicianComment where {
+        ?musician a :Musician ;
+               rdfs:label ?musicianLabel ;
+               rdfs:comment ?musicianComment .
+      }
+    `
+    return this.query(q)
+  }
+
+  getBandsAndAlbumsOfMusician(musicianIri: string) {
+    const q = `
+      select distinct ?band ?bandLabel ?album ?albumLabel where {
+      <${musicianIri}> :participatedIn [
+          :inAlbum ?album ;
+      ] .
+      ?album rdfs:label ?albumLabel .
+      ?release :ofAlbum ?album ;
+               :releaseOf [ :discographyOf ?band ] .
+      ?band rdfs:label ?bandLabel .
+  }
+    `
+    return this.query(q)
+  }
+
+  getInstrumentsOfMusician(musicianIri: string) {
+    const q = `
+      select distinct ?instrument ?instrumentLabel where {
+      <${musicianIri}> :participatedIn [ :withInstrument ?instrument ] .
+      ?instrument rdfs:label ?instrumentLabel .
+  }
+    `
+    return this.query(q)
+  }
+
+  getAllClasses(individualIri: string) {
+    const q = `
+      select distinct ?class ?classLabel where {
+        <${individualIri}> a ?class .
+        ?class rdfs:label ?classLabel .
       }
     `
     return this.query(q)

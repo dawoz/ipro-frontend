@@ -51,10 +51,10 @@ export class GenreComponent implements OnInit {
           this.influencedGenres?.push(r)
       }
     })
-    this.sparql.getInstrumentsOf(this.genres![this.genreIdx!]['genre']).subscribe(instruments =>
+    this.sparql.getInstrumentsOfGenre(this.genres![this.genreIdx!]['genre']).subscribe(instruments =>
       this.instruments = instruments.sort(
         (a,b) => a['instrumentLabel'].localeCompare(b['instrumentLabel'])))
-    this.sparql.getBandsAndAlbumsOf(this.genres![this.genreIdx!]['genre']).subscribe(res => {
+    this.sparql.getBandsAndAlbumsOfGenre(this.genres![this.genreIdx!]['genre']).subscribe(res => {
       this.bandAlbums = {}
       for (let r of res) {
         if (this.bandAlbums[r['bandLabel']] === undefined)

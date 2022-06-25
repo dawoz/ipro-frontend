@@ -53,14 +53,14 @@
     <div class="m-4">
       <p class="mb-1"><strong>Members:</strong></p>
       <div *ngFor="let e of entries(membersInstrument)">
-        <p class="my-0"><small><span class="mx-3">●</span>{{e[0]}}: <a [routerLink]="['/instrument', {instrument:i['instrument']}]" *ngFor="let i of e[1]; let j = index">{{i['instrumentLabel']}}{{j + 1 < e[1].length ? ', ' : ''}}</a></small></p>
+        <p class="my-0"><small><span class="mx-3">●</span><a [routerLink]="['/musician', {musician:e[1][0]['member']}]">{{e[0]}}</a>: <a class="link-secondary" [routerLink]="['/instrument', {instrument:i['instrument']}]" *ngFor="let i of e[1]; let j = index">{{i['instrumentLabel']}}{{j + 1 < e[1].length ? ', ' : ''}}</a></small></p>
       </div>
     </div>
 
     <div *ngIf="entries(membersRole).length > 0" class="m-4">
       <p class="mb-1"><strong>Production roles:</strong></p>
       <div *ngFor="let e of entries(membersRole)">
-        <p class="my-0"><small><span class="mx-3">●</span>{{e[0]}}: <a [routerLink]="['/instrument', {role:i['role']}]" *ngFor="let i of e[1]; let j = index">{{i['roleLabel']}}{{j + 1 < e[1].length ? ', ' : ''}}</a></small></p>
+        <p class="my-0"><small><span class="mx-3">●</span><a [routerLink]="['/musician', {musician:e[1][0]['member']}]">{{e[0]}}</a>: <a class="link-secondary" [routerLink]="['/instrument', {role:i['role']}]" *ngFor="let i of e[1]; let j = index">{{i['roleLabel']}}{{j + 1 < e[1].length ? ', ' : ''}}</a></small></p>
       </div>
     </div>
 
