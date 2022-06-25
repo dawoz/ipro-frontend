@@ -196,4 +196,53 @@ export class SparqlService {
     `
     return this.query(q)
   }
+
+  getGenresWith(instrumentIri: string) {
+    const q = `
+      select distinct ?genre ?genreLabel where {
+      [] :participatedIn [
+          :inAlbum ?album ;
+          :withInstrument <${instrumentIri}>
+      ] .
+      ?album :hasGenre ?genre .
+      ?genre rdfs:label ?genreLabel .
+  }
+    `
+    return this.query(q)
+  }
+
+  getMusiciansWithInstrument(instrumentIri: string) {
+    const q = `
+      select distinct ?musician ?musicianLabel where {
+      ?musician :participatedIn [ :withInstrument <${instrumentIri}> ] .
+      ?musician rdfs:label ?musicianLabel .
+  }
+    `
+    return this.query(q)
+  }
+
+  getMusiciansWithProductionRole(roleIri: string) {
+    const q = `
+      select distinct ?musician ?musicianLabel where {
+      ?musician :participatedIn [ :withProductionRole <${roleIri}> ] .
+      ?musician rdfs:label ?musicianLabel .
+  }
+    `
+    return this.query(q)
+  }
+
+  getMostSpecificClassOf(individualIri: string) {
+    const q = `
+      select distinct ?class ?classLabel where {
+        <${individualIri}> a ?class .
+        ?class rdfs:label ?classLabel .
+        filter not exists {
+          ?subclass ^a <${individualIri}> ;
+                    rdfs:subClassOf ?class .
+          filter( ?subclass != ?class )
+        }
+      }
+    `
+    return this.query(q)
+  }
 }

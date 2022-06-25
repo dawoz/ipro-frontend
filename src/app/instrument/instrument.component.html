@@ -22,4 +22,44 @@
       </select>
     </div>
   </form>
+
+  <div *ngIf="instrumentIdx !== undefined">
+    <hr class="my-4">
+
+    <p class="mb-4 mx-3" style="font-size: xx-large">
+      <strong class="mx-2" style="color: #00a0b8">{{instruments![instrumentIdx!]['instrumentLabel']}}</strong>
+      -
+    <span *ngIf="class !== undefined" class="mx-2" style="font-weight: lighter">{{class!['classLabel']}}</span>
+    </p>
+    <p class="m-4">{{format(instruments![instrumentIdx!]['instrumentComment'])}}</p>
+  </div>
+
+  <div *ngIf="roleIdx !== undefined">
+    <hr class="my-4">
+
+    <p class="mb-4 mx-3" style="font-size: xx-large">
+      <strong class="mx-2" style="color: #00a0b8">{{roles![roleIdx!]['roleLabel']}}</strong>
+      -
+      <span *ngIf="class !== undefined" class="mx-2" style="font-weight: lighter">{{class!['classLabel']}}</span>
+    </p>
+    <p class="m-4">{{format(roles![roleIdx!]['roleComment'])}}</p>
+  </div>
+
+  <div class="m-4" *ngIf="genres !== undefined && genres.length > 0">
+    <p class="mb-1" style="font-size: x-large"><strong>Genres</strong></p>
+    <div class="row row-cols-md-2 row-cols-lg-3">
+      <div class="col-auto" *ngFor="let g of genres">
+        <p class="my-0"><span class="mx-3">●</span><small><a [routerLink]="['/genre', {genre:g['genre']}]">{{g['genreLabel']}}</a></small></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-4" *ngIf="musicians !== undefined && musicians.length > 0">
+    <p class="mb-1" style="font-size: x-large"><strong>Musicians</strong></p>
+    <div class="row row-cols-md-2 row-cols-lg-3">
+      <div class="col-auto" *ngFor="let m of musicians">
+        <p class="my-0"><span class="mx-3">●</span><small><a [routerLink]="['/musician', {musician:m['musician']}]">{{m['musicianLabel']}}</a></small></p>
+      </div>
+    </div>
+  </div>
 </div>

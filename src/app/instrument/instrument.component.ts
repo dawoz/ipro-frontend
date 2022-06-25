@@ -12,9 +12,11 @@ export class InstrumentComponent implements OnInit {
   roles: Array<RDFData> | undefined
   instrumentIdx: number | undefined
   roleIdx: number | undefined
+  genres: Array<RDFData> | undefined
+  musicians: Array<RDFData> | undefined
+  class: RDFData | undefined;
 
   constructor(route: ActivatedRoute, private sparql: SparqlService) {
-    console.log(route.snapshot.paramMap.get('instrument') + ' ' + route.snapshot.paramMap.get('role'))
     this.sparql.getInstruments().subscribe(instruments => {
       this.instruments = instruments
       let paramMap = route.snapshot.paramMap
@@ -36,9 +38,27 @@ export class InstrumentComponent implements OnInit {
 
   queryInstrumentInfo() {
     this.roleIdx = undefined
+    this.class = undefined
+    this.genres = undefined
+    this.musicians = undefined
+    this.sparql.getMostSpecificClassOf(this.instruments![this.instrumentIdx!]['instrument']).subscribe(c => this.class = c[0])
+    this.sparql.getGenresWith(this.instruments![this.instrumentIdx!]['instrument']).subscribe(genres => this.genres = genres)
+    this.sparql.getMusiciansWithInstrument(this.instruments![this.instrumentIdx!]['instrument']).subscribe(musicians => this.musicians = musicians)
   }
 
   queryRoleInfo() {
     this.instrumentIdx = undefined
+    this.class = undefined
+    this.genres = undefined
+    this.musicians = undefined
+    this.sparql.getMostSpecificClassOf(this.roles![this.roleIdx!]['role']).subscribe(c => this.class = c[0])
+    this.sparql.getMusiciansWithProductionRole(this.roles![this.roleIdx!]['role']).subscribe(musicians => this.musicians = musicians)
+  }
+
+  format(s: string) {
+    s = s.charAt(0).toUpperCase() + s.slice(1)
+    if (!s.endsWith('.'))
+      s += '.'
+    return s
   }
 }
