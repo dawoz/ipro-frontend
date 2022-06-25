@@ -9,19 +9,24 @@ import {RDFData, SparqlService} from "../sparql/sparql.service";
 })
 export class InstrumentComponent implements OnInit {
   instruments: Array<RDFData> | undefined
+  filteredIdxs: Set<number> | undefined
+  categories: Array<RDFData> | undefined
   roles: Array<RDFData> | undefined
   instrumentIdx: number | undefined
+  cateogoryIdx: number | undefined
   roleIdx: number | undefined
   genres: Array<RDFData> | undefined
   musicians: Array<RDFData> | undefined
-  class: RDFData | undefined;
+  class: RDFData | undefined
 
   constructor(route: ActivatedRoute, private sparql: SparqlService) {
+    this.sparql.getInstrumentCategories().subscribe(categories => this.categories = categories)
     this.sparql.getInstruments().subscribe(instruments => {
       this.instruments = instruments
       let paramMap = route.snapshot.paramMap
       if (paramMap.get('instrument') !== null) {
         this.instrumentIdx = this.instruments.findIndex(e => e['instrument'] === paramMap.get('instrument'))
+        this.queryInstrumentInfo()
       }
     })
     this.sparql.getProductionRoles().subscribe(roles => {
@@ -29,6 +34,7 @@ export class InstrumentComponent implements OnInit {
       let paramMap = route.snapshot.paramMap
       if (paramMap.get('role') !== null) {
         this.roleIdx = this.roles.findIndex(e => e['role'] === paramMap.get('role'))
+        this.queryRoleInfo()
       }
     })
   }
@@ -48,6 +54,7 @@ export class InstrumentComponent implements OnInit {
 
   queryRoleInfo() {
     this.instrumentIdx = undefined
+    this.cateogoryIdx = undefined
     this.class = undefined
     this.genres = undefined
     this.musicians = undefined
@@ -60,5 +67,24 @@ export class InstrumentComponent implements OnInit {
     if (!s.endsWith('.'))
       s += '.'
     return s
+  }
+
+  filterInstruments() {
+    this.instrumentIdx = undefined
+    this.class = undefined
+    this.roleIdx = undefined
+    this.genres = undefined
+    this.musicians = undefined
+    if (this.cateogoryIdx === undefined)
+      return
+    this.sparql.getInstrumentOfCategory(this.categories![this.cateogoryIdx!]['category']).subscribe(instruments => {
+      this.filteredIdxs = new Set()
+      let s = new Set(instruments.map(rdf => rdf['instrument']))
+      for (let i = 0; i < this.instruments!.length; i++) {
+        if (s.has(this.instruments![i]['instrument'])) {
+          this.filteredIdxs.add(i)
+        }
+      }
+    })
   }
 }

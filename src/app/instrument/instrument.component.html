@@ -1,21 +1,38 @@
 <div class="m-3 mb-4">
 
   <hr class="my-4">
-  <p class="text-center my-3" style="font-size: larger"><strong>Navigate by instrument/production role</strong></p>
+
+  <p [ngClass]="{'bg-selected':instrumentIdx !== undefined}" class="text-center my-3 p-1" style="font-size: larger"><strong>Navigate by instrument</strong></p>
 
   <form class="form-inline text-center">
     <div class="d-inline-flex">
-      <p class="my-auto mx-3" [ngClass]="{'bg-info':instrumentIdx !== undefined}"><strong>Instrument</strong></p>
-      <select name="band" class="form-select" style="width: 300px" [(ngModel)]="instrumentIdx" (ngModelChange)="queryInstrumentInfo()">
-        <option disabled selected hidden [value]="undefined">select instrument</option>
-        <option *ngFor="let ins of instruments; let i = index" [ngValue]="i">{{ins['instrumentLabel']}}</option>
+      <p class="my-auto mx-3"><strong>Categories</strong></p>
+      <select name="band" class="form-select" style="width: 300px" [(ngModel)]="cateogoryIdx" (ngModelChange)="filterInstruments()">
+        <option disabled selected hidden [value]="undefined">select category</option>
+        <option *ngFor="let c of categories; let i = index" [ngValue]="i">{{c['categoryLabel']}}</option>
       </select>
     </div>
   </form>
 
   <form class="form-inline text-center mt-4">
     <div class="d-inline-flex">
-      <p class="my-auto mx-3" [ngClass]="{'bg-info':roleIdx !== undefined}"><strong>Production role</strong></p>
+      <p class="my-auto mx-3"><strong>Instrument</strong></p>
+      <select name="band" class="form-select" style="width: 300px" [(ngModel)]="instrumentIdx" (ngModelChange)="queryInstrumentInfo()">
+        <option disabled selected hidden [value]="undefined">select instrument</option>
+        <ng-container *ngFor="let ins of instruments; let i = index">
+          <option *ngIf="filteredIdxs === undefined || filteredIdxs!.has(i)" [ngValue]="i">{{ins['instrumentLabel']}}</option>
+        </ng-container>
+      </select>
+    </div>
+  </form>
+
+  <hr class="my-4">
+
+  <p [ngClass]="{'bg-selected':roleIdx !== undefined}" class="text-center my-3 p-1" style="font-size: larger"><strong>Navigate by production role</strong></p>
+
+  <form class="form-inline text-center mt-4">
+    <div class="d-inline-flex">
+      <p class="my-auto mx-3"><strong>Production role</strong></p>
       <select name="band" class="form-select" style="width: 300px" [(ngModel)]="roleIdx" (ngModelChange)="queryRoleInfo()">
         <option disabled selected hidden [value]="undefined">select production role</option>
         <option *ngFor="let r of roles; let i = index" [ngValue]="i">{{r['roleLabel']}}</option>

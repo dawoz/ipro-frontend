@@ -245,4 +245,26 @@ export class SparqlService {
     `
     return this.query(q)
   }
+
+  getInstrumentCategories() {
+    const q = `
+      select distinct ?category ?categoryLabel where {
+        ?category rdfs:subClassOf :MusicalInstrument ;
+               rdfs:label ?categoryLabel .
+          filter( ?category != :Musical_Instrument )
+      }
+    `
+    return this.query(q)
+  }
+
+  getInstrumentOfCategory(classIri: string) {
+    const q = `
+      select distinct ?instrument ?instrumentLabel where {
+        ?instrument a <${classIri}> ;
+                    rdfs:label ?instrumentLabel ;
+                    rdfs:comment ?instrumentComment .
+      }
+    `
+    return this.query(q)
+  }
 }
