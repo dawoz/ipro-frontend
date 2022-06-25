@@ -47,8 +47,8 @@ export class InstrumentComponent implements OnInit {
     this.class = undefined
     this.genres = undefined
     this.musicians = undefined
-    this.sparql.getMostSpecificClassOf(this.instruments![this.instrumentIdx!]['instrument']).subscribe(c => this.class = c[0])
-    this.sparql.getGenresWith(this.instruments![this.instrumentIdx!]['instrument']).subscribe(genres => this.genres = genres)
+    this.sparql.getMostSpecificClassOfIndividual(this.instruments![this.instrumentIdx!]['instrument']).subscribe(c => this.class = c[0])
+    this.sparql.getGenresWithInstrument(this.instruments![this.instrumentIdx!]['instrument']).subscribe(genres => this.genres = genres)
     this.sparql.getMusiciansWithInstrument(this.instruments![this.instrumentIdx!]['instrument']).subscribe(musicians => this.musicians = musicians)
   }
 
@@ -58,7 +58,7 @@ export class InstrumentComponent implements OnInit {
     this.class = undefined
     this.genres = undefined
     this.musicians = undefined
-    this.sparql.getMostSpecificClassOf(this.roles![this.roleIdx!]['role']).subscribe(c => this.class = c[0])
+    this.sparql.getMostSpecificClassOfIndividual(this.roles![this.roleIdx!]['role']).subscribe(c => this.class = c[0])
     this.sparql.getMusiciansWithProductionRole(this.roles![this.roleIdx!]['role']).subscribe(musicians => this.musicians = musicians)
   }
 

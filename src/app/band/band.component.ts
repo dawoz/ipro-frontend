@@ -42,7 +42,7 @@ export class BandComponent implements OnInit {
 
   queryAlbums() {
     this.albumIdx = undefined
-    this.sparql.query1(this.bandsUri![this.bandIdx!]).subscribe(albums => {
+    this.sparql.getAlbumsOfBand(this.bandsUri![this.bandIdx!]).subscribe(albums => {
       this.albums = albums
       let albumParam = this.route.snapshot.paramMap.get('album')
       if (albumParam !== null) {
@@ -57,11 +57,11 @@ export class BandComponent implements OnInit {
     this.membersRole = {}
     let a = this.albums![this.albumIdx!]
     // get tracks
-    this.sparql.getTracksOf(a['album']).subscribe(tracks => this.tracks[a['album']] = tracks)
+    this.sparql.getTracksOfAlbum(a['album']).subscribe(tracks => this.tracks[a['album']] = tracks)
     // get genres
-    this.sparql.getGenresOf(a['album']).subscribe(genres => this.genres = genres)
+    this.sparql.getGenresOfAlbum(a['album']).subscribe(genres => this.genres = genres)
     // get members
-    this.sparql.getMembersOf(a['album']).subscribe(members => {
+    this.sparql.getMembersOfAlbum(a['album']).subscribe(members => {
       for (let m of members) {
         if (m['roleLabel'] === undefined) {
           if (this.membersInstrument[m['memberLabel']] === undefined)

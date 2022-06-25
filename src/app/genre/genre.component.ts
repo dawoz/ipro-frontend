@@ -39,7 +39,7 @@ export class GenreComponent implements OnInit {
     this.subgenres= []
     this.originGenres = []
     this.influencedGenres = []
-    this.sparql.getRelatedGenresOf(this.genres![this.genreIdx!]['genre']).subscribe(related => {
+    this.sparql.getRelatedGenresOfGenre(this.genres![this.genreIdx!]['genre']).subscribe(related => {
       for (let r of related) {
         if (r['supergenre'] !== undefined)
           this.supergenres?.push(r)

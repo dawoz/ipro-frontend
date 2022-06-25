@@ -22,9 +22,13 @@ export class SparqlService {
     prefix vann: <http://purl.org/vocab/vann/>
     prefix cpannotationschema: <http://www.ontologydesignpatterns.org/schemas/cpannotationschema.owl#>`
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) { }
 
+  /**
+   * Helper function for querying GraphDB
+   *
+   * @param q query
+   */
   query(q: string): Observable<Array<RDFData>> {
     const params = new HttpParams()
       .set('query', this.prefix + '\n' + q)
@@ -41,6 +45,9 @@ export class SparqlService {
         .map((elem: any) => JSON.parse('{' + Object.keys(elem).map(k => ` "${k}" : "${elem[k].value.replaceAll('\"','\'')}" `) + '}'))))
   }
 
+  /**
+   * Get all bands
+   */
   public getBands(): Observable<Array<RDFData>> {
     const q = `
       select distinct ?band ?bandLabel where {
@@ -50,8 +57,12 @@ export class SparqlService {
     return this.query(q)
   }
 
-  // get albums of bands
-  public query1(bandIri: string): Observable<Array<RDFData>> {
+  /**
+   * Get all albums of a band, with year, comment, label and URL of image
+   *
+   * @param bandIri
+   */
+  public getAlbumsOfBand(bandIri: string): Observable<Array<RDFData>> {
     const q = `
       select distinct ?album ?albumLabel ?year ?albumComment ?imageUrl where {
         <${bandIri}> :discography [
@@ -66,8 +77,12 @@ export class SparqlService {
     return this.query(q)
   }
 
-  // get tracks of an album
-  public getTracksOf(albumIri: string): Observable<Array<RDFData>> {
+  /**
+   * Get all tracks of an album, with number, label and duration
+   *
+   * @param albumIri
+   */
+  public getTracksOfAlbum(albumIri: string): Observable<Array<RDFData>> {
     const q = `
       select distinct ?n ?trackLabel ?minutes ?seconds where {
         ?track :trackOf <${albumIri}> ;
@@ -82,8 +97,12 @@ export class SparqlService {
     return this.query(q)
   }
 
-  // get tracks of an album
-  public getGenresOf(albumIri: string): Observable<Array<RDFData>> {
+  /**
+   * Get all genres of an album
+   *
+   * @param albumIri
+   */
+  public getGenresOfAlbum(albumIri: string): Observable<Array<RDFData>> {
     const q = `
       select distinct ?genre ?genreLabel ?genreComment where {
         <${albumIri}> :hasGenre ?genre .
@@ -94,7 +113,12 @@ export class SparqlService {
     return this.query(q)
   }
 
-  public getMembersOf(albumIri: string): Observable<Array<RDFData>> {
+  /**
+   * Get all musicians that played music in a given album
+   *
+   * @param albumIri
+   */
+  public getMembersOfAlbum(albumIri: string): Observable<Array<RDFData>> {
     const q = `
       select distinct ?member ?role ?instrument ?memberLabel ?instrumentLabel ?roleLabel where {
         ?p :inAlbum <${albumIri}> .
@@ -110,6 +134,9 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all musical genres
+   */
   getGenres() {
     const q = `
       select distinct ?genre ?genreLabel ?genreComment where {
@@ -121,6 +148,9 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all musical instruments
+   */
   getInstruments() {
     const q = `
       select distinct ?instrument ?instrumentLabel ?instrumentComment where {
@@ -132,6 +162,9 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all production roles
+   */
   getProductionRoles() {
     const q = `
       select distinct ?role ?roleLabel ?roleComment where {
@@ -143,7 +176,17 @@ export class SparqlService {
     return this.query(q)
   }
 
-  getRelatedGenresOf(genreIri: string) {
+  /**
+   * Get all related genres of a given genre G. The possible relations are
+   *  - supergenre
+   *  - subgenre
+   *  - influenced genre
+   *  - genre that originated G
+   *  All with labels
+   *
+   * @param genreIri
+   */
+  getRelatedGenresOfGenre(genreIri: string) {
     const q = `
       select distinct
             ?subgenre ?subgenreLabel
@@ -167,6 +210,11 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all instruments that are typically used in a given genre
+   *
+   * @param genreIri
+   */
   getInstrumentsOfGenre(genreIri: string) {
     const q = `
       select distinct ?instrument ?instrumentLabel where {
@@ -181,6 +229,11 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get albums (and bands) that are classified with a given genre
+   *
+   * @param genreIri
+   */
   getBandsAndAlbumsOfGenre(genreIri: string) {
     const q = `
       select distinct ?band ?bandLabel ?album ?albumLabel where {
@@ -197,7 +250,12 @@ export class SparqlService {
     return this.query(q)
   }
 
-  getGenresWith(instrumentIri: string) {
+  /**
+   * Get all genres in which a given instrument is used
+   *
+   * @param instrumentIri
+   */
+  getGenresWithInstrument(instrumentIri: string) {
     const q = `
       select distinct ?genre ?genreLabel where {
       [] :participatedIn [
@@ -211,6 +269,11 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all musicians that play a given instrument
+   *
+   * @param instrumentIri
+   */
   getMusiciansWithInstrument(instrumentIri: string) {
     const q = `
       select distinct ?musician ?musicianLabel where {
@@ -221,6 +284,11 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all musicians that had a particular production role
+   *
+   * @param roleIri
+   */
   getMusiciansWithProductionRole(roleIri: string) {
     const q = `
       select distinct ?musician ?musicianLabel where {
@@ -231,7 +299,12 @@ export class SparqlService {
     return this.query(q)
   }
 
-  getMostSpecificClassOf(individualIri: string) {
+  /**
+   * Get the most speficic class of an individual
+   *
+   * @param individualIri
+   */
+  getMostSpecificClassOfIndividual(individualIri: string) {
     const q = `
       select distinct ?class ?classLabel where {
         <${individualIri}> a ?class .
@@ -246,6 +319,9 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all the classes of musical instruments, excluded the root class
+   */
   getInstrumentCategories() {
     const q = `
       select distinct ?category ?categoryLabel where {
@@ -257,6 +333,11 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all instruments of a given category
+   *
+   * @param classIri
+   */
   getInstrumentOfCategory(classIri: string) {
     const q = `
       select distinct ?instrument ?instrumentLabel where {
@@ -268,6 +349,9 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all musicians (with label and comment)
+   */
   getMusicians() {
     const q = `
       select distinct ?musician ?musicianLabel ?musicianComment where {
@@ -279,6 +363,11 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all albums (and band) in which a given musician participated with an instrument
+   *
+   * @param musicianIri
+   */
   getBandsAndAlbumsOfMusician(musicianIri: string) {
     const q = `
       select distinct ?band ?bandLabel ?album ?albumLabel where {
@@ -294,6 +383,11 @@ export class SparqlService {
     return this.query(q)
   }
 
+  /**
+   * Get all instruments played by a musician
+   *
+   * @param musicianIri
+   */
   getInstrumentsOfMusician(musicianIri: string) {
     const q = `
       select distinct ?instrument ?instrumentLabel where {
@@ -304,7 +398,12 @@ export class SparqlService {
     return this.query(q)
   }
 
-  getAllClasses(individualIri: string) {
+  /**
+   * Get all classes of a given individual
+   *
+   * @param individualIri
+   */
+  getAllClassesOfIndividual(individualIri: string) {
     const q = `
       select distinct ?class ?classLabel where {
         <${individualIri}> a ?class .
