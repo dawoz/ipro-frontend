@@ -22,3 +22,7 @@ body {
 .hover:hover {
   transform: scale(1.02);
 }
+
+.bg-selected {
+  background-color: aquamarine;
+}
