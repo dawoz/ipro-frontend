@@ -5,13 +5,15 @@ import {GenreComponent} from "./genre/genre.component";
 import {InstrumentComponent} from "./instrument/instrument.component";
 import {HomeComponent} from "./home/home.component";
 import {MusicianComponent} from "./musician/musician.component";
+import {EvolutionComponent} from "./evolution/evolution.component";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'band', component: BandComponent },
   { path: 'genre', component: GenreComponent },
   { path: 'instrument', component: InstrumentComponent },
-  { path: 'musician', component: MusicianComponent }
+  { path: 'musician', component: MusicianComponent },
+  { path: 'evolution', component: EvolutionComponent }
 ];
 
 @NgModule({

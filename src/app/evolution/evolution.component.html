@@ -1,0 +1,36 @@
+<div class="m-3 mb-4">
+
+
+  <hr class="my-4">
+  <p class="text-center my-3 p-1 bg-selected" style="font-size: larger"><strong>Navigate by band</strong></p>
+
+  <form class="form-inline text-center">
+    <div class="d-inline-flex">
+      <p class="my-auto mx-3"><strong>Band</strong></p>
+      <select name="band" class="form-select" style="width: 300px" [(ngModel)]="bandIdx" (ngModelChange)="queryEvolution()">
+        <option disabled selected hidden [value]="undefined">select band</option>
+        <option *ngFor="let b of bands; let i = index" [ngValue]="i">{{b['bandLabel']}}</option>
+      </select>
+    </div>
+  </form>
+
+  <div *ngIf="bandIdx !== undefined">
+
+    <hr class="my-4">
+
+    <p class="mb-4 mx-3" style="font-size: xx-large">
+      <strong class="mx-2" style="color: #00a0b8">{{bands![bandIdx!]['bandLabel']}}</strong>
+      -
+      <span style="font-weight: lighter">genre evolution</span>
+    </p>
+
+    <div *ngIf="genreEvolution && genreEvolution!.length === 0" class="text-center text-warning" style="font-size: larger; margin: 100px; text-decoration: underline">
+      No albums for {{bands![bandIdx!]['bandLabel']}} from 1966 to 1976
+    </div>
+
+    <div *ngIf="genreEvolution && genreEvolution!.length > 0">
+      <ng-vertical-timeline [data]="genreEvolution!"></ng-vertical-timeline>
+    </div>
+  </div>
+
+</div>

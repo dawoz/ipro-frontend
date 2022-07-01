@@ -70,5 +70,9 @@
         <p class="my-0"><span class="mx-3">●</span><small><a [routerLink]="['/genre', {genre:g['genre']}]">{{g['genreLabel']}}</a></small></p>
       </div>
     </div>
+
+    <div class="m-4">
+      <a style="font-size: larger" [routerLink]="['/evolution', {band:this.bandsUri![this.bandIdx!]}]">Genres evolution of {{this.bands![this.bandIdx!]}}</a>
+    </div>
   </div>
 </div>

@@ -412,4 +412,28 @@ export class SparqlService {
     `
     return this.query(q)
   }
+
+  /**
+   * Gets all albums of a band with genres ordered by year
+   *
+   * @param bandIri
+   */
+  getGenreEvolutionOfBand(bandIri: string) {
+    const q = `
+      select distinct ?album ?albumLabel ?imageUrl ?year ?genre ?genreLabel where {
+        <${bandIri}> :discography [
+            :containsRelease [
+                ?ofAlbum ?album ;
+                :releaseYear ?year
+            ]
+         ] .
+         ?album rdfs:label ?albumLabel ;
+                :hasGenre ?genre ;
+                :imageUrl ?imageUrl .
+         ?genre rdfs:label ?genreLabel .
+      }
+        order by ?year
+    `
+    return this.query(q)
+  }
 }

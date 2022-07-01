@@ -1,0 +1,42 @@
+.title {
+  margin: 10px 10px 10px 15px;
+
+}
+
+img.ui.tiny.image {
+  min-width: 100px;
+  min-height: 100px;
+}
+
+div.icon {
+  min-width: 100px;
+  min-height: 100px;
+}
+
+div.container.left.right::after{
+  left: 3.5%;
+}
+
+div.container.left::after{
+  left: 3.5%;
+}
+
+@media screen and (min-width: 600px) {
+  div.container.left.right::after{
+    left: -3.5%;
+  }
+
+  div.container.left::after{
+    left: 96.5%;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  div.container.left.right::after{
+    left: -2%;
+  }
+
+  div.container.left::after{
+    left: 98%;
+  }
+}

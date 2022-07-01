@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import {FormsModule} from "@angular/forms";
 import { MusicianComponent } from './musician/musician.component';
+import { EvolutionComponent } from './evolution/evolution.component';
+import {NgVerticalTimelineModule} from "ng-vertical-timeline";
 
 @NgModule({
   declarations: [
@@ -18,13 +20,15 @@ import { MusicianComponent } from './musician/musician.component';
     GenreComponent,
     InstrumentComponent,
     HomeComponent,
-    MusicianComponent
+    MusicianComponent,
+    EvolutionComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgVerticalTimelineModule
   ],
   providers: [],
   bootstrap: [AppComponent]
