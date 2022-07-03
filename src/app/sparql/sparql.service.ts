@@ -16,6 +16,8 @@ export class SparqlService {
     prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     prefix xml: <http://www.w3.org/XML/1998/namespace>
     prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+    prefix mo: <http://purl.org/ontology/mo/>
+    prefix dbo: <http://dbpedia.org/ontology/>
     prefix foaf: <http://xmlns.com/foaf/0.1/>
     prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     prefix time: <http://www.w3.org/2006/time#>
@@ -403,11 +405,12 @@ export class SparqlService {
    *
    * @param individualIri
    */
-  getAllClassesOfIndividual(individualIri: string) {
+  getSubclassesOfMusician(individualIri: string) {
     const q = `
       select distinct ?class ?classLabel where {
         <${individualIri}> a ?class .
-        ?class rdfs:label ?classLabel .
+        ?class rdfs:label ?classLabel
+        filter(?class != mo:MusicArtist && ?class != dbo:MusicalArtist && ?class != foaf:Person)
       }
     `
     return this.query(q)

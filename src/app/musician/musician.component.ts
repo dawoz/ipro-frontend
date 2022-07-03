@@ -50,7 +50,7 @@ export class MusicianComponent implements OnInit {
     this.sparql.getInstrumentsOfMusician(this.musicians![this.musicianIdx!]['musician']).subscribe(instruments =>
       this.instruments = instruments.sort(
         (a,b) => a['instrumentLabel'].localeCompare(b['instrumentLabel'])))
-    this.sparql.getAllClassesOfIndividual(this.musicians![this.musicianIdx!]['musician']).subscribe(classes => this.classes = classes)
+    this.sparql.getSubclassesOfMusician(this.musicians![this.musicianIdx!]['musician']).subscribe(classes => this.classes = classes)
   }
 
   albumsCondition() {
