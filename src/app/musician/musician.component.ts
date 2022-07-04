@@ -15,6 +15,12 @@ export class MusicianComponent implements OnInit {
   roles: Array<RDFData> | undefined
   classes: Array<RDFData> | undefined
 
+  /**
+   * Load musicians. If the URL has an arg, read it
+   *
+   * @param sparql
+   * @param route
+   */
   constructor(private sparql: SparqlService, private route: ActivatedRoute) {
     this.sparql.getMusicians().subscribe(musicians => {
       this.musicians = musicians.sort((a,b) => a['musicianLabel'].localeCompare(b['musicianLabel']))
@@ -38,6 +44,9 @@ export class MusicianComponent implements OnInit {
 
   entries = Object.entries
 
+  /**
+   * Load musician info
+   */
   queryMusician() {
     this.sparql.getBandsAndAlbumsOfMusician(this.musicians![this.musicianIdx!]['musician']).subscribe(res => {
       this.bandAlbums = {}

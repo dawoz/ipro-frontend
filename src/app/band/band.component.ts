@@ -25,6 +25,12 @@ export class BandComponent implements OnInit {
   membersInstrument: Record<string,RDFData[]> = {}
   membersRole: Record<string, RDFData[]> = {}
 
+  /**
+   * Load bands and if the URL has a band argument, read it
+   *
+   * @param sparql
+   * @param route
+   */
   constructor(private sparql: SparqlService, private route: ActivatedRoute) {
     this.sparql.getBands().subscribe(d => {
       this.bandsUri = d.map<string>(e => e['band'])
@@ -40,6 +46,9 @@ export class BandComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Load albums of the selected band. If the URL has a album argument, read it
+    */
   queryAlbums() {
     this.albumIdx = undefined
     this.sparql.getAlbumsOfBand(this.bandsUri![this.bandIdx!]).subscribe(albums => {
@@ -52,6 +61,9 @@ export class BandComponent implements OnInit {
     })
   }
 
+  /**
+   * Query album information
+   */
   queryAlbumInfo() {
     this.membersInstrument = {}
     this.membersRole = {}

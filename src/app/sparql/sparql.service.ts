@@ -9,6 +9,8 @@ export type RDFData = Record<string, string>
 })
 export class SparqlService {
   private endpointUrl = 'http://localhost:7200/repositories/ipro'
+
+  // prefixes for the queries
   private prefix =
     `prefix : <http://www.semanticweb.org/ipro#>
     prefix dc: <http://purl.org/dc/elements/1.1/>

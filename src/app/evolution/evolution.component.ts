@@ -14,6 +14,12 @@ export class EvolutionComponent implements OnInit {
   bandIdx: number | undefined
   genreEvolution: TimelineEvent[] | undefined
 
+  /**
+   * Load bands and if the URL contains a band argument, read it
+   *
+   * @param sparql
+   * @param route
+   */
   constructor(private sparql: SparqlService, route: ActivatedRoute) {
     this.sparql.getBands().subscribe(d => {
       this.bands = d
@@ -27,6 +33,9 @@ export class EvolutionComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  /**
+   * Get information of the evolution of the genre for the selected band
+   */
   queryEvolution() {
     this.sparql.getGenreEvolutionOfBand(this.bands![this.bandIdx!]['band']).subscribe(albums => {
       let m: Record<string, Array<RDFData>> = {}

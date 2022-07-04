@@ -19,6 +19,12 @@ export class InstrumentComponent implements OnInit {
   musicians: Array<RDFData> | undefined
   class: RDFData | undefined
 
+  /**
+   * Load instruments. If the URL contains an instrument arg, read id. Load categories as well
+   *
+   * @param route
+   * @param sparql
+   */
   constructor(route: ActivatedRoute, private sparql: SparqlService) {
     this.sparql.getInstrumentCategories().subscribe(categories => this.categories = categories)
     this.sparql.getInstruments().subscribe(instruments => {
@@ -42,6 +48,9 @@ export class InstrumentComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Load instrument info
+   */
   queryInstrumentInfo() {
     this.roleIdx = undefined
     this.class = undefined
@@ -52,6 +61,9 @@ export class InstrumentComponent implements OnInit {
     this.sparql.getMusiciansWithInstrument(this.instruments![this.instrumentIdx!]['instrument']).subscribe(musicians => this.musicians = musicians)
   }
 
+  /**
+   * Load production role info
+   */
   queryRoleInfo() {
     this.instrumentIdx = undefined
     this.cateogoryIdx = undefined

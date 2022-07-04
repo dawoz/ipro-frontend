@@ -18,6 +18,13 @@ export class GenreComponent implements OnInit {
   instruments: Array<RDFData> | undefined
   bandAlbums: Record<string, Array<RDFData>> | undefined
 
+  /**
+   * Load genres. If the URL contains a genre arg, read it
+   *
+   * @param router
+   * @param route
+   * @param sparql
+   */
   constructor(router: Router, route: ActivatedRoute, private sparql: SparqlService) {
     router.routeReuseStrategy.shouldReuseRoute = () => false
     this.sparql.getGenres().subscribe(genres => {
@@ -34,6 +41,9 @@ export class GenreComponent implements OnInit {
 
   entries = Object.entries
 
+  /**
+   * Query genre information
+   */
   queryGenre() {
     this.supergenres = []
     this.subgenres= []
